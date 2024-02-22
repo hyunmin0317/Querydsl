@@ -10,7 +10,7 @@
 
 ## :notebook_with_decorative_cover: 로드맵
 
-1. #### [자바 ORM 표준 JPA 프로그래밍](https://github.com/hyunmin0317/Spring-JPA)
+1. #### [자바 ORM 표준 JPA 프로그래밍](https://github.com/hyunmin0317/JPA)
 2. #### [스프링 부트와 JPA 활용](https://github.com/hyunmin0317/Spring-Boot-JPA)
 3. #### [스프링 데이터 JPA](https://github.com/hyunmin0317/Spring-Data-JPA)
 4. #### Querydsl

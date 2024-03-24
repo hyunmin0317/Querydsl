@@ -456,6 +456,7 @@ Temporary Items
 *.icloud
 
 ### Gradle ###
+HELP.md
 .gradle
 **/build/
 !src/**/build/

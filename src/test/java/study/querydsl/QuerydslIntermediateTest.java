@@ -5,6 +5,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -227,6 +228,30 @@ public class QuerydslIntermediateTest {
                 .where(member.age.gt(18))
                 .execute();
         System.out.println(count);
+    }
+
+    @Test
+    public void sqlFunction() throws Exception {
+        List<String> result = query
+                .select(Expressions.stringTemplate("function('replace', {0}, {1}, {2})",
+                        member.username, "member", "M"))
+                .from(member)
+                .fetch();
+
+        result.forEach(System.out::println);
+    }
+
+    @Test
+    public void sqlFunction2() throws Exception {
+        List<String> result = query
+                .select(member.username)
+                .from(member)
+//                .where(member.username.eq(
+//                        Expressions.stringTemplate("function('lower', {0})", member.username)))
+                .where(member.username.eq(member.username.lower()))
+                .fetch();
+
+        result.forEach(System.out::println);
     }
 
     private List<Member> searchMember1(String usernameCond, Integer ageCond) {

@@ -3,6 +3,7 @@ package study.querydsl;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -424,6 +425,28 @@ public class QuerydslBasicTest {
                         .when(member.age.between(21, 30)).then("21~30살")
                         .otherwise("기타"))
                 .from(member)
+                .fetch();
+
+        result.forEach(System.out::println);
+    }
+
+    @Test
+    public void constant() throws Exception {
+        List<Tuple> result = query
+                .select(member.username, Expressions.constant("A"))
+                .from(member)
+                .fetch();
+
+        result.forEach(System.out::println);
+    }
+
+    @Test
+    public void concat() throws Exception {
+        //{username}_{age}
+        List<String> result = query
+                .select(member.username.concat("_").concat(member.age.stringValue()))
+                .from(member)
+                .where(member.username.eq("member1"))
                 .fetch();
 
         result.forEach(System.out::println);

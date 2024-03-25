@@ -11,6 +11,7 @@ import study.querydsl.entity.Member;
 import study.querydsl.entity.Team;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static study.querydsl.entity.QMember.member;
 
 @SpringBootTest
 @Transactional
@@ -46,6 +47,16 @@ public class QuerydslBasicTest {
         Member findMember = em.createQuery("select m from Member m where m.username = :username", Member.class)
                 .setParameter("username", "member1")
                 .getSingleResult();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void startQuerydsl() throws Exception {
+        Member findMember = query.select(member)
+                .from(member)
+                .where(member.username.eq("member1"))
+                .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
     }

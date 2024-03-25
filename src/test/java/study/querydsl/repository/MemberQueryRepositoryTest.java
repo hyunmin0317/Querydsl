@@ -40,7 +40,7 @@ class MemberQueryRepositoryTest {
     }
 
     @Test
-    public void searchTest() throws Exception {
+    public void searchByBuilderTest() throws Exception {
         initData();
 
         MemberSearchCondition condition = new MemberSearchCondition();
@@ -54,6 +54,25 @@ class MemberQueryRepositoryTest {
         condition2.setTeamName("teamB");
         List<MemberTeamDto> result2 = memberQueryRepository.searchByBuilder(condition2);
         assertThat(result2).extracting("username").containsExactly("member3", "member4");
+        result2.forEach(System.out::println);
+    }
+
+    @Test
+    public void searchTest() throws Exception {
+        initData();
+
+        MemberSearchCondition condition = new MemberSearchCondition();
+        condition.setAgeGoe(35);
+        condition.setAgeLoe(40);
+        condition.setTeamName("teamB");
+        List<MemberTeamDto> result = memberQueryRepository.search(condition);
+        assertThat(result).extracting("username").containsExactly("member4");
+
+        MemberSearchCondition condition2 = new MemberSearchCondition();
+        condition2.setTeamName("teamB");
+        List<MemberTeamDto> result2 = memberQueryRepository.search(condition2);
+        assertThat(result2).extracting("username").containsExactly("member3", "member4");
+        result2.forEach(System.out::println);
     }
 
     private void initData() {

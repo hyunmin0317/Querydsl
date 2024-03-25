@@ -53,9 +53,32 @@ public class QuerydslBasicTest {
 
     @Test
     public void startQuerydsl() throws Exception {
-        Member findMember = query.select(member)
+        Member findMember = query
+                .select(member)
                 .from(member)
                 .where(member.username.eq("member1"))
+                .fetchOne();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void search() throws Exception {
+        Member findMember = query
+                .selectFrom(member)
+                .where(member.username.eq("member1")
+                        .and(member.age.eq(10)))
+                .fetchOne();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void searchAndParam() throws Exception {
+        Member findMember = query
+                .selectFrom(member)
+                .where(member.username.eq("member1"),
+                        member.age.eq(10))
                 .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");

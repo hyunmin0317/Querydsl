@@ -142,4 +142,31 @@ public class QuerydslBasicTest {
         assertThat(member6.getUsername()).isEqualTo("member6");
         assertThat(memberNull.getUsername()).isNull();
     }
+
+    @Test
+    public void pagingFetch() throws Exception {
+        List<Member> result = query
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetch();
+
+        assertThat(result.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void pagingFetchResults() throws Exception {
+        QueryResults<Member> result = query
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetchResults();
+
+        assertThat(result.getTotal()).isEqualTo(4);
+        assertThat(result.getLimit()).isEqualTo(2);
+        assertThat(result.getOffset()).isEqualTo(1);
+        assertThat(result.getResults().size()).isEqualTo(2);
+    }
 }

@@ -179,6 +179,56 @@ public class QuerydslIntermediateTest {
         assertThat(result.size()).isEqualTo(1);
     }
 
+    @Test
+    public void bulkUpdate() throws Exception {
+
+        //member1 = 10 -> DB 비회원 - 영속성 컨텍스트 member1
+        //member2 = 20 -> DB 비회원 - 영속성 컨텍스트 member2
+        //member3 = 30 -> DB member3 - 영속성 컨텍스트 member3
+        //member4 = 40 -> DB member4 - 영속성 컨텍스트 member4
+
+        long count = query
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        List<Member> result = query
+                .selectFrom(member)
+                .fetch();
+
+        System.out.println(count);
+        result.forEach(System.out::println);
+    }
+
+    @Test
+    public void bulkAdd() throws Exception {
+        long count = query
+                .update(member)
+                .set(member.age, member.age.add(1))
+                .execute();
+
+        long count2 = query
+                .update(member)
+                .set(member.age, member.age.multiply(2))
+                .execute();
+
+        System.out.println(count);
+        System.out.println(count2);
+    }
+
+    @Test
+    public void bulkDelete() throws Exception {
+        long count = query
+                .delete(member)
+                .where(member.age.gt(18))
+                .execute();
+        System.out.println(count);
+    }
+
     private List<Member> searchMember1(String usernameCond, Integer ageCond) {
         BooleanBuilder builder = new BooleanBuilder();
         if (usernameCond != null)

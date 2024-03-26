@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.dto.MemberSearchCondition;
 import study.querydsl.dto.MemberTeamDto;
@@ -56,6 +58,19 @@ class MemberRepositoryTest {
         assertThat(result2).extracting("username").containsExactly("member3", "member4");
         result2.forEach(System.out::println);
     }
+
+    @Test
+    public void searchPageSimpleTest() throws Exception {
+        initData();
+
+        MemberSearchCondition condition = new MemberSearchCondition();
+        PageRequest pageRequest = PageRequest.of(0, 3);
+
+        Page<MemberTeamDto> result = memberRepository.searchPageSimple(condition, pageRequest);
+        assertThat(result.getSize()).isEqualTo(3);
+        assertThat(result.getContent()).extracting("username").containsExactly("member1", "member2", "member3");
+    }
+
 
     private void initData() {
         Team teamA = new Team("teamA");
